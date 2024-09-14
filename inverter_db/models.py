@@ -26,15 +26,18 @@ class InverterData(models.Model):
     ac_radiator_temperature = models.FloatField()  # Температура AC радіатора
     transformer_temperature = models.FloatField()  # Температура трансформатора
     dc_radiator_temperature = models.FloatField()  # Температура DC радіатора
-    batt_power = models.FloatField()  # Потужність батареї (W)
-    batt_current = models.FloatField()  # Струм батареї (A)
+    # batt_power = models.FloatField()  # Потужність батареї (W)
+    # batt_current = models.FloatField()  # Струм батареї (A)
     pv_voltage = models.FloatField()  # Напруга PV (сонячна батарея)
     charger_current = models.FloatField()  # Струм зарядного пристрою
     charger_power = models.FloatField()  # Потужність зарядного пристрою (W)
 
     def __str__(self):
         return f"Inverter data at {self.timestamp}"
-
+    
+    class Meta:
+        verbose_name = "Inverter Current Data"
+        verbose_name_plural = "Inverter Current Data History"
 #'inverters_accumulated_data': {'Accumulated charger power high': (0, 'KWH'), 'Accumulated charger power low': (0.0, 'KWH'), 'Accumulated discharger power high': (0, 'KWH'), 'Accumulated discharger power low': (0.7, 'KWH'), 'Accumulated buy power high': (0, 'KWH'), 'Accumulated buy power low': (0.0, 'KWH'), 'Accumulated sell power high': (0, 'KWH'), 'Accumulated sell power low': (0.0, 'KWH'), 'Accumulated load power high': (0, 'KWH'), 'Accumulated load power low': (0.6, 'KWH'), 'Accumulated self_use power high': (0, 'KWH'), 'Accumulated self_use power low': (0.7, 'KWH'), 'Accumulated PV_sell power high': (0, 'KWH'), 'Accumulated PV_sell power low': (0.0, 'KWH'), 'Accumulated grid_charger power high': (0, 'KWH'), 'Accumulated  grid_charger power low': (0.0, 'KWH'), 'Accumulated PV power high': (0, 'KWH'), 'Accumulated PV power low': (0.0, 'KWH'), 'Accumulated day': (175, 'day'), 'Accumulated hour': (2, 'hour'), 'Accumulated minute': (1, 'minute')}
 
 class InverterAccumulatedData(models.Model):
@@ -54,6 +57,10 @@ class InverterAccumulatedData(models.Model):
 
     def __str__(self):
         return f"Accumulated inverter data at {self.timestamp}"
+    
+    class Meta:
+        verbose_name = "Inverter Accumulated Data"
+        verbose_name_plural = "Inverter Accumulated History"
 
 #'inverters_base_config': {'AC voltage grade': (230, 'V'), 'Rated power(VA)': (5000, 'VA'), 'Batt voltage grade': (48, 'V'), 'Rated power(W)': (5000, 'W'), 'BattVol Grade': (48, 'V'), 'Rated Current': (80.0, 'A')}
 
@@ -68,6 +75,10 @@ class InverterBaseConfig(models.Model):
 
     def __str__(self):
         return f"Base Config at {self.timestamp}"
+    
+    class Meta:
+        verbose_name = "Inverter Base Config"  # Назва в однині
+        verbose_name_plural = "Inverter Base Config History"  # Назва у множині
 
 #'inverters_param_states': {'work state': 'OffGrid', 'Inverter relay state': 'Connect', 'Grid relay state': 'Disconnect', 'Load relay state': 'Connect', 'N_Line relay state': 'Disconnect', 'DC relay state': 'Connect', 'Earth relay state': 'Disconnect', 'Charger workstate': 'Initialization mode', 'Mppt state': 'Stop', 'charging state': 'Stop'},
 
@@ -80,17 +91,21 @@ class InverterParamState(models.Model):
     n_line_relay_state = models.CharField(max_length=50)  # Стан реле N лінії
     dc_relay_state = models.CharField(max_length=50)  # Стан реле постійного струму
     earth_relay_state = models.CharField(max_length=50)  # Стан реле заземлення
-    charger_workstate = models.CharField(max_length=50)  # Стан роботи зарядного пристрою
+    charger_work_state = models.CharField(max_length=50)  # Стан роботи зарядного пристрою
     mppt_state = models.CharField(max_length=50)  # Стан MPPT (контролер заряду)
     charging_state = models.CharField(max_length=50)  # Стан заряду батареї
 
     def __str__(self):
         return f"Param State at {self.timestamp}"
+    
+    class Meta:
+        verbose_name = "Inverter Current Systems State"
+        verbose_name_plural = "Inverter Current Systems State History"
 
 
 #'inverters_errors': {'Error message 1': 0, 'Error message 2': 0, 'Error message 3': 0, 'Warning message 1': 0, 'Warning message 2': 0, 'Error message, Refer to frame Charger Error message 1': 0, 'Warning message, Refer to frame Charger Warning message 1': 0}}
 
-class InverterError(models.Model):
+class InverterErrors(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)  # Часова мітка
     error_message_1 = models.TextField(blank=True, null=True)  # Повідомлення про помилку 1
     error_message_2 = models.TextField(blank=True, null=True)  # Повідомлення про помилку 2
@@ -102,3 +117,8 @@ class InverterError(models.Model):
 
     def __str__(self):
         return f"Error at {self.timestamp}"
+    
+    class Meta:
+        verbose_name = "Inverter Current Errors"
+        verbose_name_plural = "Inverter Errors History"
+        
