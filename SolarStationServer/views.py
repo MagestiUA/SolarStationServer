@@ -51,8 +51,8 @@ def data_collector(request):
                     # batt_power=avg_inv_data['Batt power']*2,
                     # batt_current=avg_inv_data['Batt current']*2,
                     pv_voltage=avg_inv_data['PV voltage'],
-                    charger_current=avg_inv_data['Charger current']*2,
-                    charger_power=avg_inv_data['Charger power']*2,
+                    charger_current=avg_inv_data['Charger current']*1.9,
+                    charger_power=avg_inv_data['Charger power']*1.9,
                 )
                 inverter_data.save()
             
