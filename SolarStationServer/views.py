@@ -56,6 +56,7 @@ def data_collector(request):
                 )
                 inverter_data.save()
             
+            
             if len(iad.keys()) > 0:
                 accumulated_data = InverterAccumulatedData(
                     timestamp=timestamp,
