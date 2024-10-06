@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Сторінка в розробці</title>
+</head>
+<body>
+    <h1>Сторінка в розробці</h1>
+    <p>Дякуємо, що завітали! Ми активно працюємо над реалізацією цієї сторінки.</p>
+
+    <!-- Перевіряємо, чи користувач залогінений -->
+    {% if user.is_authenticated %}
+        <a href="{% url 'account_logout' %}">Sign Out</a> |
+        <a href="{% url 'account_change_password' %}">Change Password</a> |
+        <a href="{% url 'account_email' %}">Manage Email Addresses</a>
+    {% else %}
+        <a href="{% url 'account_login' %}">Sign In</a>
+    {% endif %}
+</body>
+</html>

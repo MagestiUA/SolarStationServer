@@ -2,7 +2,9 @@ import datetime
 
 from django.http import JsonResponse
 from django.utils import timezone
-from django.views.decorators.csrf import csrf_exempt
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework_api_key.permissions import HasAPIKey
+
 from inverter_db.models import InverterData, InverterAccumulatedData, InverterBaseConfig, InverterParamState, InverterErrors  # Імпортуємо моделі
 import json
 
@@ -10,7 +12,8 @@ import json
 def calculate_full_value(high, low):
     return (high[0] + low[0])*2
 
-@csrf_exempt  # Це дозволяє надсилати POST-запити без CSRF-токена
+@api_view(['POST'])
+@permission_classes([HasAPIKey])
 def data_collector(request):
     if request.method == 'POST':
         try:
@@ -20,7 +23,6 @@ def data_collector(request):
             inverters_base_config = data['inverters_base_config']
             inverters_param_states = data['inverters_param_states']
             inverters_errors = data['inverters_errors']
-            # timestamp = datetime.datetime.now().isoformat()
             timestamp = timezone.now()
             if len(avg_inv_data.keys()) > 0:
                 inverter_data = InverterData(
