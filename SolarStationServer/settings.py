@@ -214,9 +214,17 @@ LOGGING = {
 }
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
-        'SCOPE': ['profile', 'email'],
-        'AUTH_PARAMS': {'access_type': 'online'},
-        'CLIENT_ID': os.getenv('GOOGLE_CLIENT_ID'),
-        'SECRET': os.getenv('GOOGLE_CLIENT_SECRET'),
+        'APP': {
+            'client_id': '<GOOGLE_CLIENT_ID>',
+            'secret': '<GOOGLE_CLIENT_SECRET>',
+            'key': ''
+        },
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        },
     }
 }
