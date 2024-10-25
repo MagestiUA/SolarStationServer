@@ -210,10 +210,10 @@ LOGGING = {
     },
 }
 
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATIC_FILES_DIRS = [
-     os.path.join(BASE_DIR, 'static'),
-]
-print(STATIC_ROOT)
-print(STATIC_FILES_DIRS)
+# STATIC_URL = '/static/'
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# STATIC_FILES_DIRS = [
+#      os.path.join(BASE_DIR, 'static'),
+# ]
+# print(STATIC_ROOT)
+# print(STATIC_FILES_DIRS)
