@@ -58,8 +58,8 @@
         <a href="{% url 'account_change_password' %}">Change Password</a> |
         <a href="{% url 'account_email' %}">Manage Email Addresses</a>
     {% else %}
-        <a href="{% url 'account_login' %}">Sign In</a>
-{#        <a href="{% provider_login_url 'google' %}">Sign in with Google</a>#}
+{#        <a href="{% url 'account_login' %}">Sign In</a>#}
+        <a href="{% provider_login_url 'google' %}">Sign in with Google</a>
     {% endif %}
 
     <div id="inverter-data">
