@@ -1,0 +1,25 @@
+services:
+  web:
+    build: .
+    restart: always
+    command: gunicorn SolarStationServer.wsgi:application --bind 0.0.0.0:5001 --workers 3
+    ports:
+      - "5001:5001"
+#    volumes:
+#      - static:/app/static
+    environment:
+      - DEBUG=False
+      - ALLOWED_HOSTS=*
+
+#  nginx:
+#    image: nginx:latest
+#    ports:
+#      - "5001:80"
+#    volumes:
+#      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+#      - static:/app/static/
+#    depends_on:
+#      - web
+#
+#volumes:
+#  static:

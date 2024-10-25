@@ -18,6 +18,9 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env()
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+LOG_DIR = os.path.join(BASE_DIR, 'logs')
+if not os.path.exists(LOG_DIR):
+    os.makedirs(LOG_DIR)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -28,7 +31,10 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*', '192.168.72.110']
+ALLOWED_HOSTS = ['*', '192.168.72.110', '6c83-80-92-235-230.ngrok-free.app', 'localhost',]
+CSRF_TRUSTED_ORIGINS = [
+    'https://6c83-80-92-235-230.ngrok-free.app',  # Домен ngrok
+]
 
 
 # Application definition
@@ -41,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.sites',
     'django.contrib.staticfiles',
+    'bootstrapform',
     'rest_framework',
     'rest_framework_api_key',
     'allauth',
@@ -161,3 +168,52 @@ REST_FRAMEWORK = {
         'rest_framework_api_key.permissions.HasAPIKey',
     ],
 }
+#
+# CSRF_COOKIE_SECURE = True
+# SESSION_COOKIE_SECURE = True
+# SECURE_BROWSER_XSS_FILTER = True
+# SECURE_CONTENT_TYPE_NOSNIFF = True
+# SECURE_HSTS_SECONDS = 3600
+# SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+# SECURE_HSTS_PRELOAD = True
+SECURE_SSL_REDIRECT = False
+SECURE_HSTS_SECONDS = 0
+
+
+LOG_FILE_PATH = os.path.join(LOG_DIR, 'debug.log')
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+        },
+        'file': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': LOG_FILE_PATH,
+            'encoding': 'utf-8',
+        },
+    },
+    'root': {
+        'handlers': ['console', 'file'],
+        'level': 'ERROR',
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'file'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    },
+}
+
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_FILES_DIRS = [
+     os.path.join(BASE_DIR, 'static'),
+]
+print(STATIC_ROOT)
+print(STATIC_FILES_DIRS)

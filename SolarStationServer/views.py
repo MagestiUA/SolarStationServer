@@ -2,6 +2,7 @@ import datetime
 
 from django.http import JsonResponse
 from django.utils import timezone
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework_api_key.permissions import HasAPIKey
 
@@ -121,4 +122,35 @@ def data_collector(request):
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
 
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=405)
+
+
+@csrf_exempt
+def get_current_data(request):
+    if request.method == 'GET':
+        try:
+            page = int(request.GET.get('page', 1))
+            page_size = int(request.GET.get('page_size', 10))
+            
+            field_filter = request.GET.get('field_filter', None)
+            
+            seven_days_ago = timezone.now() - datetime.timedelta(days=7)
+            
+            data_query = InverterData.objects.filter(timestamp__gte=seven_days_ago)
+            
+            if field_filter:
+                data_query = data_query.filter(field_name=field_filter)  # Замість field_name вкажіть потрібне поле
+            
+            data_query = data_query.order_by('-timestamp')
+            
+            start = (page - 1) * page_size
+            end = start + page_size
+            data_paginated = data_query[start:end]
+            
+            data_list = list(data_paginated.values())
+            
+            return JsonResponse({'status': 'success', 'data': data_list}, status=200)
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+    
     return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=405)

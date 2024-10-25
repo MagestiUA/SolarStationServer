@@ -1,0 +1,12 @@
+.venv
+.run
+logs
+.git
+.gitignore
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+*.log
+*.tmp
+.idea

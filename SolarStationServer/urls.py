@@ -23,6 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
     path('api/data_collector', views.data_collector, name='data_collector'),
+    path('api/get_current_data', views.get_current_data, name='data_collector'),
     path('', login_redirect, name='login_redirect'),
     path('base/', base_page, name='base_page'),
 ]
