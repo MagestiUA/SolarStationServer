@@ -29,7 +29,7 @@ if not os.path.exists(LOG_DIR):
 SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*', '192.168.72.110', '6c83-80-92-235-230.ngrok-free.app', 'localhost',]
 CSRF_TRUSTED_ORIGINS = [
@@ -69,6 +69,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'SolarStationServer.urls'
@@ -157,8 +158,10 @@ TIME_FORMAT = 'H:i:s'
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
-STATIC_ROOT = BASE_DIR / 'static'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
+
+# STATIC_ROOT = BASE_DIR / 'static'
 # STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # STATIC_FILES_DIRS = [
 #      os.path.join(BASE_DIR, 'static'),
