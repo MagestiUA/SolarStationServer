@@ -29,7 +29,7 @@ if not os.path.exists(LOG_DIR):
 SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*', '192.168.72.110', '6c83-80-92-235-230.ngrok-free.app', 'localhost',]
 CSRF_TRUSTED_ORIGINS = [
@@ -161,13 +161,6 @@ STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 
-# STATIC_ROOT = BASE_DIR / 'static'
-# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-# STATIC_FILES_DIRS = [
-#      os.path.join(BASE_DIR, 'static'),
-# ]
-
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
@@ -179,13 +172,15 @@ REST_FRAMEWORK = {
     ],
 }
 #
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
-SECURE_BROWSER_XSS_FILTER = True
-SECURE_CONTENT_TYPE_NOSNIFF = True
-SECURE_HSTS_SECONDS = 3600
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_HSTS_PRELOAD = True
+# CSRF_COOKIE_SECURE = True
+# SESSION_COOKIE_SECURE = True
+# SECURE_BROWSER_XSS_FILTER = True
+# SECURE_CONTENT_TYPE_NOSNIFF = True
+# SECURE_HSTS_SECONDS = 3600
+# SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+# SECURE_HSTS_PRELOAD = True
+SECURE_HSTS_PRELOAD = False
+SECURE_HSTS_SECONDS = 0
 
 
 LOG_FILE_PATH = os.path.join(LOG_DIR, 'debug.log')
@@ -216,4 +211,12 @@ LOGGING = {
             'propagate': True,
         },
     },
+}
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': ['profile', 'email'],
+        'AUTH_PARAMS': {'access_type': 'online'},
+        'CLIENT_ID': os.getenv('GOOGLE_CLIENT_ID'),
+        'SECRET': os.getenv('GOOGLE_CLIENT_SECRET'),
+    }
 }
