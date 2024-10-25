@@ -18,6 +18,55 @@
 {#    {% endif %}#}
 {#</body>#}
 {#</html>#}
+{##}
+{#<!DOCTYPE html>#}
+{#<html lang="uk">#}
+{#<head>#}
+{#    <meta charset="UTF-8">#}
+{#    <title>Сторінка в розробці</title>#}
+{#    <script>#}
+{#        document.addEventListener('DOMContentLoaded', function () {#}
+{#            fetch('/api/get_current_data?page=1&page_size=1')#}
+{#                .then(response => response.json())#}
+{#                .then(data => {#}
+{#                    if (data.status === 'success' && data.data.length > 0) {#}
+{#                        const latestData = data.data[0];#}
+{#                        let output = '<h2>Останні дані інвертора:</h2>';#}
+{#                        output += '<ul>';#}
+{#                        for (const [key, value] of Object.entries(latestData)) {#}
+{#                            output += `<li><strong>${key}:</strong> ${value}</li>`;#}
+{#                        }#}
+{#                        output += '</ul>';#}
+{#                        document.getElementById('inverter-data').innerHTML = output;#}
+{#                    }#}
+{#                })#}
+{#                .catch(error => {#}
+{#                    console.error('Error fetching data:', error);#}
+{#                });#}
+{#        });#}
+{#    </script>#}
+{#</head>#}
+{#<body>#}
+{#    <h1>Сторінка в розробці</h1>#}
+{#    <p>Дякуємо, що завітали! Ми активно працюємо над реалізацією цієї сторінки.</p>#}
+{##}
+{#    <!-- Перевіряємо, чи користувач залогінений -->#}
+{#    {% if user.is_authenticated %}#}
+{#        <a href="{% url 'account_logout' %}">Sign Out</a> |#}
+{#        <a href="{% url 'account_change_password' %}">Change Password</a> |#}
+{#        <a href="{% url 'account_email' %}">Manage Email Addresses</a>#}
+{#    {% else %}#}
+{#        <a href="{% url 'account_login' %}">Sign In</a>#}
+{#    {% endif %}#}
+{##}
+{#    <div id="inverter-data">#}
+{#        <h2>Останні дані інвертора завантажуються...</h2>#}
+{#    </div>#}
+{#</body>#}
+{#</html>#}
+
+{% load socialaccount %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="uk">
 <head>
@@ -55,7 +104,8 @@
         <a href="{% url 'account_change_password' %}">Change Password</a> |
         <a href="{% url 'account_email' %}">Manage Email Addresses</a>
     {% else %}
-        <a href="{% url 'account_login' %}">Sign In</a>
+        <a href="{% url 'account_login' %}">Sign In</a> |
+        <a href="{% provider_login_url 'google' %}">Sign in with Google</a>
     {% endif %}
 
     <div id="inverter-data">
