@@ -11,7 +11,7 @@ from drf_yasg import openapi
 
 
 def calculate_full_value(high, low):
-    return (high + low) * 2
+    return (high[0] + low[0])*2
 
 @swagger_auto_schema(
     method='post',
