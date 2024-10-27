@@ -24,28 +24,28 @@ class InverterDataSerializer(BaseSerializer):
             'inverter_voltage': data.get('Inverter voltage'),
             'grid_voltage': data.get('Grid voltage'),
             'bus_voltage': data.get('BUS voltage'),
-            'control_current': data.get('Control current') * 2 if data.get('Control current') else None,
-            'inverter_current': data.get('Inverter current') * 2 if data.get('Inverter current') else None,
-            'grid_current': data.get('Grid current') * 2 if data.get('Grid current') else None,
-            'load_current': data.get('Load current') * 2 if data.get('Load current') else None,
-            'p_inverter': data.get('PInverter') * 2 if data.get('PInverter') else None,
-            'p_grid': data.get('PGrid') * 2 if data.get('PGrid') else None,
-            'p_load': data.get('PLoad') * 2 if data.get('PLoad') else None,
+            'control_current': data.get('Control current') * 2 if data.get('Control current') else 0,
+            'inverter_current': data.get('Inverter current') * 2 if data.get('Inverter current') else 0,
+            'grid_current': data.get('Grid current') * 2 if data.get('Grid current') else 0,
+            'load_current': data.get('Load current') * 2 if data.get('Load current') else 0,
+            'p_inverter': data.get('PInverter') * 2 if data.get('PInverter') else 0,
+            'p_grid': data.get('PGrid') * 2 if data.get('PGrid') else 0,
+            'p_load': data.get('PLoad') * 2 if data.get('PLoad') else 0,
             'load_percent': data.get('Load percent'),
-            's_inverter': data.get('SInverter') * 2 if data.get('SInverter') else None,
-            's_grid': data.get('SGrid') * 2 if data.get('SGrid') else None,
-            's_load': data.get('Sload') * 2 if data.get('Sload') else None,
-            'q_inverter': data.get('Qinverter') * 2 if data.get('Qinverter') else None,
-            'q_grid': data.get('Qgrid') * 2 if data.get('Qgrid') else None,
-            'q_load': data.get('Qload') * 2 if data.get('Qload') else None,
+            's_inverter': data.get('SInverter') * 2 if data.get('SInverter') else 0,
+            's_grid': data.get('SGrid') * 2 if data.get('SGrid') else 0,
+            's_load': data.get('Sload') * 2 if data.get('Sload') else 0,
+            'q_inverter': data.get('Qinverter') * 2 if data.get('Qinverter') else 0,
+            'q_grid': data.get('Qgrid') * 2 if data.get('Qgrid') else 0,
+            'q_load': data.get('Qload') * 2 if data.get('Qload') else 0,
             'inverter_frequency': data.get('Inverter frequency'),
             'grid_frequency': data.get('Grid frequency'),
             'ac_radiator_temperature': data.get('AC radiator temperature'),
             'transformer_temperature': data.get('Transformer temperature'),
             'dc_radiator_temperature': data.get('DC radiator temperature'),
             'pv_voltage': data.get('PV voltage'),
-            'charger_current': round(data.get('Charger current') * 1.75, 2) if data.get('Charger current') else None,
-            'charger_power': round(data.get('Charger power') * 1.75, 2) if data.get('Charger power') else None,
+            'charger_current': round(data.get('Charger current') * 1.75, 2) if data.get('Charger current') else 0,
+            'charger_power': round(data.get('Charger power') * 1.75, 2) if data.get('Charger power') else 0,
         }
         return super().to_internal_value(data)
     
@@ -83,9 +83,9 @@ class InverterAccumulatedDataSerializer(BaseSerializer):
             'accumulated_pv_power': calculate_full_value(
                 data.get('Accumulated PV power high'), data.get('Accumulated PV power low')
             ),
-            'accumulated_day': data.get('Accumulated day')[0] if data.get('Accumulated day') else None,
-            'accumulated_hour': data.get('Accumulated hour')[0] if data.get('Accumulated hour') else None,
-            'accumulated_minute': data.get('Accumulated minute')[0] if data.get('Accumulated minute') else None,
+            'accumulated_day': data.get('Accumulated day')[0] if data.get('Accumulated day') else 0,
+            'accumulated_hour': data.get('Accumulated hour')[0] if data.get('Accumulated hour') else 0,
+            'accumulated_minute': data.get('Accumulated minute')[0] if data.get('Accumulated minute') else 0,
         }
         return super().to_internal_value(data)
     
@@ -96,12 +96,12 @@ class InverterBaseConfigSerializer(BaseSerializer):
     
     def to_internal_value(self, data):
         data = {
-            'ac_voltage_grade': data.get('AC voltage grade')[0] if data.get('AC voltage grade') else None,
-            'rated_power_va': data.get('Rated power(VA)')[0] if data.get('Rated power(VA)') else None,
-            'batt_voltage_grade': data.get('Batt voltage grade')[0] if data.get('Batt voltage grade') else None,
-            'rated_power_w': data.get('Rated power(W)')[0] if data.get('Rated power(W)') else None,
-            'battvol_grade': data.get('BattVol Grade')[0] if data.get('BattVol Grade') else None,
-            'rated_current_a': data.get('Rated Current')[0] if data.get('Rated Current') else None,
+            'ac_voltage_grade': data.get('AC voltage grade')[0] if data.get('AC voltage grade') else 0,
+            'rated_power_va': data.get('Rated power(VA)')[0] if data.get('Rated power(VA)') else 0,
+            'batt_voltage_grade': data.get('Batt voltage grade')[0] if data.get('Batt voltage grade') else 0,
+            'rated_power_w': data.get('Rated power(W)')[0] if data.get('Rated power(W)') else 0,
+            'battvol_grade': data.get('BattVol Grade')[0] if data.get('BattVol Grade') else 0,
+            'rated_current_a': data.get('Rated Current')[0] if data.get('Rated Current') else 0,
         }
         return super().to_internal_value(data)
 
