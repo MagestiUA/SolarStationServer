@@ -1,6 +1,13 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.authtoken.models import Token
+
 
 User = get_user_model()
 
@@ -16,3 +23,33 @@ def login_redirect(request):
 @login_required
 def base_page(request):
     return render(request, 'base_page.html')
+
+@api_view(['POST'])
+def api_login(request):
+    username = request.data.get('username')
+    password = request.data.get('password')
+    user = authenticate(request, username=username, password=password)
+    if user is not None:
+        login(request, user)
+        token, created = Token.objects.get_or_create(user=user)
+        return Response({'token': token.key}, status=status.HTTP_200_OK)
+    return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+
+@api_view(['POST'])
+def api_register(request):
+    username = request.data.get('username')
+    email = request.data.get('email')
+    password = request.data.get('password')
+    if User.objects.filter(username=username).exists():
+        return Response({'error': 'Username already exists'}, status=status.HTTP_400_BAD_REQUEST)
+    user = User.objects.create_user(username=username, email=email, password=password)
+    token = Token.objects.create(user=user)
+    return Response({'message': 'User created successfully', 'token': token.key}, status=status.HTTP_201_CREATED)
+
+@api_view(['POST'])
+def api_logout(request):
+    if request.user.is_authenticated:
+        Token.objects.filter(user=request.user).delete()
+        logout(request)
+        return Response({'message': 'Logged out successfully'}, status=status.HTTP_200_OK)
+    return Response({'error': 'User not authenticated'}, status=status.HTTP_401_UNAUTHORIZED)

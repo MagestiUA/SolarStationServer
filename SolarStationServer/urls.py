@@ -17,7 +17,7 @@ Including another URLconf
 from . import views
 from django.contrib import admin
 from django.urls import path, include
-from accounts.views import login_redirect, base_page
+from accounts.views import login_redirect, base_page, api_login, api_register, api_logout
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,4 +26,7 @@ urlpatterns = [
     path('api/get_current_data', views.get_current_data, name='data_collector'),
     path('', login_redirect, name='login_redirect'),
     path('base/', base_page, name='base_page'),
+    path('api/login/', api_login, name='api_login'),
+    path('api/register/', api_register, name='api_register'),
+    path('api/logout/', api_logout, name='api_logout'),
 ]

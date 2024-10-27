@@ -139,7 +139,7 @@ def get_current_data(request):
             data_query = InverterData.objects.filter(timestamp__gte=seven_days_ago)
             
             if field_filter:
-                data_query = data_query.filter(field_name=field_filter)  # Замість field_name вкажіть потрібне поле
+                data_query = data_query.filter(field_name=field_filter)
             
             data_query = data_query.order_by('-timestamp')
             
