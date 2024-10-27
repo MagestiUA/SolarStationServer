@@ -3,6 +3,8 @@ from inverter_db.models import InverterData, InverterAccumulatedData, InverterBa
 from django.utils import timezone
 
 def calculate_full_value(high, low):
+    if not high or not low:
+        return None
     return (high[0] + low[0])*2
 
 class BaseSerializer(serializers.ModelSerializer):
