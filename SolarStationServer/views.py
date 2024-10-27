@@ -1,17 +1,20 @@
 import datetime
-from django.http import JsonResponse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework_api_key.permissions import HasAPIKey
-from inverter_db.models import InverterData, InverterAccumulatedData, InverterBaseConfig, InverterParamState, InverterErrors
-import json
+from inverter_db.models import InverterData
+from django.http import JsonResponse
+from rest_framework.decorators import api_view
+from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework import status
+from .serializers import (
+    InverterDataSerializer, InverterAccumulatedDataSerializer,
+    InverterBaseConfigSerializer, InverterParamStateSerializer, InverterErrorsSerializer
+)
 
 
 from .serializers import (
-    DataCollectorSerializer,
     InverterDataSerializer,
     InverterAccumulatedDataSerializer,
     InverterBaseConfigSerializer,
@@ -22,11 +25,60 @@ from .serializers import (
 
 @swagger_auto_schema(
     method='post',
-    request_body=DataCollectorSerializer,
-    responses={
-        status.HTTP_201_CREATED: 'Data saved successfully',
-        status.HTTP_400_BAD_REQUEST: 'Invalid data',
-    }
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'avg_inv_data': openapi.Schema(
+                type=openapi.TYPE_OBJECT,
+                description="Дані інвертора",
+                properties={
+                    'Battery voltage': openapi.Schema(type=openapi.TYPE_NUMBER, description="Battery Voltage"),
+                    'Inverter voltage': openapi.Schema(type=openapi.TYPE_NUMBER, description="Inverter Voltage"),
+                    'Grid voltage': openapi.Schema(type=openapi.TYPE_NUMBER, description="Grid Voltage"),
+                    'BUS voltage': openapi.Schema(type=openapi.TYPE_NUMBER, description="BUS Voltage"),
+                    'Control current': openapi.Schema(type=openapi.TYPE_NUMBER, description="Control Current"),
+                    # Додай інші поля, як потрібно
+                }
+            ),
+            'inverters_accumulated_data': openapi.Schema(
+                type=openapi.TYPE_OBJECT,
+                description="Накопичені дані інвертора",
+                properties={
+                    'Accumulated charger power high': openapi.Schema(type=openapi.TYPE_INTEGER, description="High part of Accumulated Charger Power"),
+                    'Accumulated charger power low': openapi.Schema(type=openapi.TYPE_INTEGER, description="Low part of Accumulated Charger Power"),
+                    # Додай інші поля, як потрібно
+                }
+            ),
+            'inverters_base_config': openapi.Schema(
+                type=openapi.TYPE_OBJECT,
+                description="Базова конфігурація інвертора",
+                properties={
+                    'AC voltage grade': openapi.Schema(type=openapi.TYPE_ARRAY, items=openapi.Items(type=openapi.TYPE_NUMBER), description="AC Voltage Grade"),
+                    'Rated power(VA)': openapi.Schema(type=openapi.TYPE_ARRAY, items=openapi.Items(type=openapi.TYPE_NUMBER), description="Rated Power (VA)"),
+                    # Додай інші поля, як потрібно
+                }
+            ),
+            'inverters_param_states': openapi.Schema(
+                type=openapi.TYPE_OBJECT,
+                description="Параметри стану інвертора",
+                properties={
+                    'work state': openapi.Schema(type=openapi.TYPE_STRING, description="Work State"),
+                    'Inverter relay state': openapi.Schema(type=openapi.TYPE_STRING, description="Inverter Relay State"),
+                    # Додай інші поля, як потрібно
+                }
+            ),
+            'inverters_errors': openapi.Schema(
+                type=openapi.TYPE_OBJECT,
+                description="Помилки інвертора",
+                properties={
+                    'Error message 1': openapi.Schema(type=openapi.TYPE_STRING, description="Error Message 1"),
+                    'Error message 2': openapi.Schema(type=openapi.TYPE_STRING, description="Error Message 2"),
+                    # Додай інші поля, як потрібно
+                }
+            ),
+        }
+    ),
+    responses={201: 'Data saved successfully', 400: 'Validation error'}
 )
 @api_view(['POST'])
 @permission_classes([HasAPIKey])
@@ -139,44 +191,49 @@ from .serializers import (
 #
 #     return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=405)
 def data_collector(request):
-    data_json = json.loads(request.body)
-    avg_inv_data = data_json['avg_inv_data']
-    iad = data_json['inverters_accumulated_data']
-    inverters_base_config = data_json['inverters_base_config']
-    inverters_param_states = data_json['inverters_param_states']
-    inverters_errors = data_json['inverters_errors']
-    serializer = DataCollectorSerializer(data=request.data)
-    if serializer.is_valid():
-        data = serializer.validated_data
-        
-        if len(avg_inv_data.keys()) > 0:
-            inverter_data_serializer = InverterDataSerializer(data=data['avg_inv_data'])
-            if inverter_data_serializer.is_valid():
-                inverter_data_serializer.save()
-        
-        if len(iad.keys()) > 0:
-            accumulated_data_serializer = InverterAccumulatedDataSerializer(data=data['inverters_accumulated_data'])
-            if accumulated_data_serializer.is_valid():
-                accumulated_data_serializer.save()
-        
-        if len(inverters_base_config.keys()) > 0:
-            base_config_serializer = InverterBaseConfigSerializer(data=data['inverters_base_config'])
-            if base_config_serializer.is_valid():
-                base_config_serializer.save()
-        
-        if len(inverters_param_states.keys()) > 0:
-            param_state_serializer = InverterParamStateSerializer(data=data['inverters_param_states'])
-            if param_state_serializer.is_valid():
-                param_state_serializer.save()
-        
-        if len(inverters_errors.keys()) > 0:
-            errors_serializer = InverterErrorsSerializer(data=data['inverters_errors'])
-            if errors_serializer.is_valid():
-                errors_serializer.save()
-            
-        return JsonResponse({'status': 'success', 'message': 'Data saved successfully'}, status=201)
-    
-    return JsonResponse(serializer.errors, status=400)
+    data = request.data
+
+    avg_inv_data = data.get('avg_inv_data')
+    if avg_inv_data:
+        inverter_data_serializer = InverterDataSerializer(data=avg_inv_data)
+        if inverter_data_serializer.is_valid():
+            inverter_data_serializer.save()
+        else:
+            return JsonResponse(inverter_data_serializer.errors, status=400)
+
+    inverters_accumulated_data = data.get('inverters_accumulated_data')
+    if inverters_accumulated_data:
+        accumulated_data_serializer = InverterAccumulatedDataSerializer(data=inverters_accumulated_data)
+        if accumulated_data_serializer.is_valid():
+            accumulated_data_serializer.save()
+        else:
+            return JsonResponse(accumulated_data_serializer.errors, status=400)
+
+    inverters_base_config = data.get('inverters_base_config')
+    if inverters_base_config:
+        base_config_serializer = InverterBaseConfigSerializer(data=inverters_base_config)
+        if base_config_serializer.is_valid():
+            base_config_serializer.save()
+        else:
+            return JsonResponse(base_config_serializer.errors, status=400)
+
+    inverters_param_states = data.get('inverters_param_states')
+    if inverters_param_states:
+        param_state_serializer = InverterParamStateSerializer(data=inverters_param_states)
+        if param_state_serializer.is_valid():
+            param_state_serializer.save()
+        else:
+            return JsonResponse(param_state_serializer.errors, status=400)
+
+    inverters_errors = data.get('inverters_errors')
+    if inverters_errors:
+        errors_serializer = InverterErrorsSerializer(data=inverters_errors)
+        if errors_serializer.is_valid():
+            errors_serializer.save()
+        else:
+            return JsonResponse(errors_serializer.errors, status=400)
+
+    return JsonResponse({'status': 'success', 'message': 'Data saved successfully'}, status=201)
 
 @csrf_exempt
 def get_current_data(request):
