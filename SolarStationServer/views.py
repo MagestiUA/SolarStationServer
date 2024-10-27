@@ -143,27 +143,27 @@ def data_collector(request):
     if serializer.is_valid():
         data = serializer.validated_data
         
-        if data['avg_inv_data']:
+        if len(data['avg_inv_data']) > 0:
             inverter_data_serializer = InverterDataSerializer(data=data['avg_inv_data'])
             if inverter_data_serializer.is_valid():
                 inverter_data_serializer.save()
         
-        if data['inverters_accumulated_data']:
+        if len(data['inverters_accumulated_data']) > 0:
             accumulated_data_serializer = InverterAccumulatedDataSerializer(data=data['inverters_accumulated_data'])
             if accumulated_data_serializer.is_valid():
                 accumulated_data_serializer.save()
         
-        if data['inverters_base_config']:
+        if len(data['inverters_base_config']) > 0:
             base_config_serializer = InverterBaseConfigSerializer(data=data['inverters_base_config'])
             if base_config_serializer.is_valid():
                 base_config_serializer.save()
         
-        if data['inverters_param_states']:
+        if len(data['inverters_param_states']) > 0:
             param_state_serializer = InverterParamStateSerializer(data=data['inverters_param_states'])
             if param_state_serializer.is_valid():
                 param_state_serializer.save()
         
-        if data['inverters_errors']:
+        if len(data['inverters_errors']) > 0:
             errors_serializer = InverterErrorsSerializer(data=data['inverters_errors'])
             if errors_serializer.is_valid():
                 errors_serializer.save()
