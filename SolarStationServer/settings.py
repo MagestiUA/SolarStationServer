@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'bootstrapform',
     'drf_yasg',
+    'graphene_django',
     'inverter_db',
     'accounts',
 ]
@@ -223,4 +224,8 @@ LOGGING = {
             'propagate': True,
         },
     },
+}
+
+GRAPHENE = {
+    'SCHEMA': 'inverter_db.schema.schema',
 }
