@@ -3,10 +3,11 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.authtoken.models import Token
+from rest_framework.permissions import AllowAny
 
 
 User = get_user_model()
@@ -25,6 +26,7 @@ def base_page(request):
     return render(request, 'base_page.html')
 
 @api_view(['POST'])
+@permission_classes([AllowAny])
 def api_login(request):
     username = request.data.get('username')
     password = request.data.get('password')
@@ -36,6 +38,7 @@ def api_login(request):
     return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 
 @api_view(['POST'])
+@permission_classes([AllowAny])
 def api_register(request):
     username = request.data.get('username')
     email = request.data.get('email')
