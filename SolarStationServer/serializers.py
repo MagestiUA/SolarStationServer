@@ -7,12 +7,13 @@ def calculate_full_value(high, low):
         return 0
     return (high[0] + low[0])*2
 
-class BaseSerializer(serializers.ModelSerializer):
-    timestamp = serializers.DateTimeField(required=False)
 
-    def validate_timestamp(self, value):
-        """Встановлює поточний час, якщо поле timestamp відсутнє."""
-        return value or timezone.now()
+class BaseSerializer(serializers.ModelSerializer):
+    def to_internal_value(self, data):
+        if 'timestamp' not in data or not data['timestamp']:
+            data['timestamp'] = timezone.now()
+        
+        return super().to_internal_value(data)
 
 class InverterDataSerializer(BaseSerializer):
     class Meta:
