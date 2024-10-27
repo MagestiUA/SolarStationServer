@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import environ
 import os
+from rest_framework.authtoken.models import Token
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
