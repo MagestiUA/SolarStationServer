@@ -22,10 +22,10 @@ class InverterDataSerializer(BaseSerializer):
     def to_internal_value(self, data):
         # Перевизначення назв параметрів
         data = {
-            'battery_voltage': data.get('Battery voltage'),
-            'inverter_voltage': data.get('Inverter voltage'),
-            'grid_voltage': data.get('Grid voltage'),
-            'bus_voltage': data.get('BUS voltage'),
+            'battery_voltage': data.get('Battery voltage') if data.get('Battery voltage') else 0,
+            'inverter_voltage': data.get('Inverter voltage') if data.get('Inverter voltage') else 0,
+            'grid_voltage': data.get('Grid voltage') if data.get('Grid voltage') else 0,
+            'bus_voltage': data.get('BUS voltage') if data.get('BUS voltage') else 0,
             'control_current': data.get('Control current') * 2 if data.get('Control current') else 0,
             'inverter_current': data.get('Inverter current') * 2 if data.get('Inverter current') else 0,
             'grid_current': data.get('Grid current') * 2 if data.get('Grid current') else 0,
@@ -33,19 +33,19 @@ class InverterDataSerializer(BaseSerializer):
             'p_inverter': data.get('PInverter') * 2 if data.get('PInverter') else 0,
             'p_grid': data.get('PGrid') * 2 if data.get('PGrid') else 0,
             'p_load': data.get('PLoad') * 2 if data.get('PLoad') else 0,
-            'load_percent': data.get('Load percent'),
+            'load_percent': data.get('Load percent') if data.get('Load percent') else 0,
             's_inverter': data.get('SInverter') * 2 if data.get('SInverter') else 0,
             's_grid': data.get('SGrid') * 2 if data.get('SGrid') else 0,
             's_load': data.get('Sload') * 2 if data.get('Sload') else 0,
             'q_inverter': data.get('Qinverter') * 2 if data.get('Qinverter') else 0,
             'q_grid': data.get('Qgrid') * 2 if data.get('Qgrid') else 0,
             'q_load': data.get('Qload') * 2 if data.get('Qload') else 0,
-            'inverter_frequency': data.get('Inverter frequency'),
-            'grid_frequency': data.get('Grid frequency'),
-            'ac_radiator_temperature': data.get('AC radiator temperature'),
-            'transformer_temperature': data.get('Transformer temperature'),
-            'dc_radiator_temperature': data.get('DC radiator temperature'),
-            'pv_voltage': data.get('PV voltage'),
+            'inverter_frequency': data.get('Inverter frequency') if data.get('Inverter frequency') else 50,
+            'grid_frequency': data.get('Grid frequency') if data.get('Grid frequency') else 50,
+            'ac_radiator_temperature': data.get('AC radiator temperature') if data.get('AC radiator temperature') else 0,
+            'transformer_temperature': data.get('Transformer temperature') if data.get('Transformer temperature') else 0,
+            'dc_radiator_temperature': data.get('DC radiator temperature') if data.get('DC radiator temperature') else 0,
+            'pv_voltage': data.get('PV voltage') if data.get('PV voltage') else 0,
             'charger_current': round(data.get('Charger current') * 1.75, 2) if data.get('Charger current') else 0,
             'charger_power': round(data.get('Charger power') * 1.75, 2) if data.get('Charger power') else 0,
         }
@@ -115,16 +115,16 @@ class InverterParamStateSerializer(BaseSerializer):
     
     def to_internal_value(self, data):
         data = {
-            'work_state': data.get('work state'),
-            'inverter_relay_state': data.get('Inverter relay state'),
-            'grid_relay_state': data.get('Grid relay state'),
-            'load_relay_state': data.get('Load relay state'),
-            'n_line_relay_state': data.get('N_Line relay state'),
-            'dc_relay_state': data.get('DC relay state'),
-            'earth_relay_state': data.get('Earth relay state'),
-            'charger_work_state': data.get('Charger workstate'),
-            'mppt_state': data.get('Mppt state'),
-            'charging_state': data.get('charging state'),
+            'work_state': data.get('work state') if data.get('work state') else 'OffGrid',
+            'inverter_relay_state': data.get('Inverter relay state') if data.get('Inverter relay state') else 'NONE',
+            'grid_relay_state': data.get('Grid relay state') if data.get('Grid relay state') else 'NONE',
+            'load_relay_state': data.get('Load relay state') if data.get('Load relay state') else 'NONE',
+            'n_line_relay_state': data.get('N_Line relay state') if data.get('N_Line relay state') else 'NONE',
+            'dc_relay_state': data.get('DC relay state') if data.get('DC relay state') else 'NONE',
+            'earth_relay_state': data.get('Earth relay state') if data.get('Earth relay state') else 'NONE',
+            'charger_work_state': data.get('Charger workstate') if data.get('Charger workstate') else 'OffGrid',
+            'mppt_state': data.get('Mppt state') if data.get('Mppt state') else 'OffGrid',
+            'charging_state': data.get('charging state') if data.get('charging state') else 'OffGrid',
         }
         return super().to_internal_value(data)
 
@@ -136,13 +136,13 @@ class InverterErrorsSerializer(BaseSerializer):
     
     def to_internal_value(self, data):
         data = {
-            'error_message_1': data.get('Error message 1'),
-            'error_message_2': data.get('Error message 2'),
-            'error_message_3': data.get('Error message 3'),
-            'warning_message_1': data.get('Warning message 1'),
-            'warning_message_2': data.get('Warning message 2'),
-            'charger_error_message': data.get('Error message, Refer to frame Charger Error message 1'),
-            'charger_warning_message': data.get('Warning message, Refer to frame Charger Warning message 1'),
+            'error_message_1': data.get('Error message 1') if data.get('Error message 1') else 0,
+            'error_message_2': data.get('Error message 2') if data.get('Error message 2') else 0,
+            'error_message_3': data.get('Error message 3') if data.get('Error message 3') else 0,
+            'warning_message_1': data.get('Warning message 1') if data.get('Warning message 1') else 0,
+            'warning_message_2': data.get('Warning message 2') if data.get('Warning message 2') else 0,
+            'charger_error_message': data.get('Error message, Refer to frame Charger Error message 1') if data.get('Error message, Refer to frame Charger Error message 1') else 0,
+            'charger_warning_message': data.get('Warning message, Refer to frame Charger Warning message 1') if data.get('Warning message, Refer to frame Charger Warning message 1') else 0,
         }
         return super().to_internal_value(data)
 
