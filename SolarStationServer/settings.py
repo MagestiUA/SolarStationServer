@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import environ
 import os
-from rest_framework.authtoken.models import Token
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -51,7 +50,6 @@ INSTALLED_APPS = [
     'bootstrapform',
     'rest_framework',
     'rest_framework_api_key',
-    'rest_framework.authtoken'
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -168,16 +166,22 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# REST_FRAMEWORK = {
+#     'DEFAULT_PERMISSION_CLASSES': [
+#         'rest_framework_api_key.permissions.HasAPIKey',
+#     ],
+# }
+#
+
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework_api_key.permissions.HasAPIKey',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
-        'rest_framework.authentication.SessionAuthentication',  # Залиште для сесійної аутентифікації
+        'rest_framework.authentication.SessionAuthentication',
     ],
 }
-#
 # CSRF_COOKIE_SECURE = True
 # SESSION_COOKIE_SECURE = True
 # SECURE_BROWSER_XSS_FILTER = True
