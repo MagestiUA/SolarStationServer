@@ -47,7 +47,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.sites',
     'django.contrib.staticfiles',
-    'bootstrapform',
     'rest_framework',
     'rest_framework_api_key',
     'rest_framework.authtoken',
@@ -55,6 +54,8 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
+    'bootstrapform',
+    'drf_yasg',
     'inverter_db',
     'accounts',
 ]
