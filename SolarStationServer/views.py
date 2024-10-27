@@ -139,31 +139,37 @@ from .serializers import (
 #
 #     return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=405)
 def data_collector(request):
+    data_json = json.loads(request.body)
+    avg_inv_data = data_json['avg_inv_data']
+    iad = data_json['inverters_accumulated_data']
+    inverters_base_config = data_json['inverters_base_config']
+    inverters_param_states = data_json['inverters_param_states']
+    inverters_errors = data_json['inverters_errors']
     serializer = DataCollectorSerializer(data=request.data)
     if serializer.is_valid():
         data = serializer.validated_data
         
-        if len(data['avg_inv_data']) > 0:
+        if len(avg_inv_data.keys()) > 0:
             inverter_data_serializer = InverterDataSerializer(data=data['avg_inv_data'])
             if inverter_data_serializer.is_valid():
                 inverter_data_serializer.save()
         
-        if len(data['inverters_accumulated_data']) > 0:
+        if len(iad.keys()) > 0:
             accumulated_data_serializer = InverterAccumulatedDataSerializer(data=data['inverters_accumulated_data'])
             if accumulated_data_serializer.is_valid():
                 accumulated_data_serializer.save()
         
-        if len(data['inverters_base_config']) > 0:
+        if len(inverters_base_config.keys()) > 0:
             base_config_serializer = InverterBaseConfigSerializer(data=data['inverters_base_config'])
             if base_config_serializer.is_valid():
                 base_config_serializer.save()
         
-        if len(data['inverters_param_states']) > 0:
+        if len(inverters_param_states.keys()) > 0:
             param_state_serializer = InverterParamStateSerializer(data=data['inverters_param_states'])
             if param_state_serializer.is_valid():
                 param_state_serializer.save()
         
-        if len(data['inverters_errors']) > 0:
+        if len(inverters_errors.keys()) > 0:
             errors_serializer = InverterErrorsSerializer(data=data['inverters_errors'])
             if errors_serializer.is_valid():
                 errors_serializer.save()
