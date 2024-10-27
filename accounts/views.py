@@ -7,6 +7,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import AllowAny
+from rest_framework.authtoken.models import Token
 
 
 User = get_user_model()
@@ -27,7 +28,6 @@ def base_page(request):
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def api_login(request):
-    from rest_framework.authtoken.models import Token  # Імпорт всередині функції
     username = request.data.get('username')
     password = request.data.get('password')
     user = authenticate(request, username=username, password=password)
@@ -40,7 +40,6 @@ def api_login(request):
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def api_register(request):
-    from rest_framework.authtoken.models import Token
     username = request.data.get('username')
     email = request.data.get('email')
     password = request.data.get('password')
@@ -52,7 +51,6 @@ def api_register(request):
 
 @api_view(['POST'])
 def api_logout(request):
-    from rest_framework.authtoken.models import Token  # Імпорт всередині функції
     if request.user.is_authenticated:
         Token.objects.filter(user=request.user).delete()
         logout(request)
