@@ -1,27 +1,35 @@
 from rest_framework import serializers
 from inverter_db.models import InverterData, InverterAccumulatedData, InverterBaseConfig, InverterParamState, InverterErrors
+from django.utils import timezone
 
-class InverterDataSerializer(serializers.ModelSerializer):
+class BaseSerializer(serializers.ModelSerializer):
+    timestamp = serializers.DateTimeField(required=False)
+
+    def validate_timestamp(self, value):
+        """Встановлює поточний час, якщо поле timestamp відсутнє."""
+        return value or timezone.now()
+
+class InverterDataSerializer(BaseSerializer):
     class Meta:
         model = InverterData
         fields = '__all__'
 
-class InverterAccumulatedDataSerializer(serializers.ModelSerializer):
+class InverterAccumulatedDataSerializer(BaseSerializer):
     class Meta:
         model = InverterAccumulatedData
         fields = '__all__'
 
-class InverterBaseConfigSerializer(serializers.ModelSerializer):
+class InverterBaseConfigSerializer(BaseSerializer):
     class Meta:
         model = InverterBaseConfig
         fields = '__all__'
 
-class InverterParamStateSerializer(serializers.ModelSerializer):
+class InverterParamStateSerializer(BaseSerializer):
     class Meta:
         model = InverterParamState
         fields = '__all__'
 
-class InverterErrorsSerializer(serializers.ModelSerializer):
+class InverterErrorsSerializer(BaseSerializer):
     class Meta:
         model = InverterErrors
         fields = '__all__'
