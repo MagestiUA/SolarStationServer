@@ -13,7 +13,7 @@ from SolarStationServer.tasks import send_battery_voltage
 def telegram(request: Request):
     data = request.data
     chat_id = data['message']['chat']['id']
-    if data['message']['text'] == ' ':
+    if data['message']['text'].lower() == 'battery':
         send_battery_voltage.delay(user_id=chat_id)
         return Response('OK!')
     text = 'I listens to you! ' + data['message']['text']
