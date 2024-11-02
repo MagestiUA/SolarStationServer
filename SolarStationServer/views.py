@@ -1,5 +1,5 @@
 import datetime
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view, permission_classes
@@ -8,6 +8,7 @@ from inverter_db.models import InverterData, InverterAccumulatedData, InverterBa
 import json
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
+from inverter_db.tasks import hello_world_task
 
 
 def calculate_full_value(high, low):
@@ -225,3 +226,10 @@ def get_current_data(request):
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
     
     return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=405)
+
+
+@csrf_exempt
+def hello_world(request):
+    name = request.GET.get('name', 'World')
+    hello_world_task.delay(name)
+    return HttpResponse('Hello, World!')

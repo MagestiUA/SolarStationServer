@@ -27,8 +27,6 @@ if not os.path.exists(LOG_DIR):
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env('SECRET_KEY')
-
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = ['*', '192.168.72.110', '6c83-80-92-235-230.ngrok-free.app', 'localhost',]
@@ -59,6 +57,7 @@ INSTALLED_APPS = [
     'graphene_django',
     'inverter_db',
     'accounts',
+    'telegram',
 ]
 
 SITE_ID = 1
@@ -229,3 +228,5 @@ LOGGING = {
 GRAPHENE = {
     'SCHEMA': 'inverter_db.schema.schema',
 }
+CELERY_BROKER_URL = env('REDIS_URL')
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
