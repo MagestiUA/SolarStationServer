@@ -10,9 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 from pathlib import Path
-from urllib.parse import urlparse, urlencode, urlunparse
-
 import environ
+from urllib.parse import urlparse, urlencode, urlunparse
 import os
 
 

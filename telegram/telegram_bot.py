@@ -24,7 +24,7 @@ def set_webhook():
     resp = requests.post(
         f'https://api.telegram.org/bot{token}/setWebhook',
         json={
-            'url': 'https://sorar-station-monitor-3b53afc4534a.herokuapp.com/admin/inverter_db/inverterdata/telegram'
+            'url': 'https://sorar-station-monitor-3b53afc4534a.herokuapp.com/telegram'
         }
     )
     print(resp.json())
@@ -33,3 +33,4 @@ def set_webhook():
 if __name__ == "__main__":
     chat_id = 710346358
     send_telegram_message(chat_id, "Hello, I'll spam you!")
+    # set_webhook()
