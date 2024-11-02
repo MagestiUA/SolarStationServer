@@ -10,6 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 from pathlib import Path
+from urllib.parse import urlparse, urlencode, urlunparse
+
 import environ
 import os
 
@@ -228,14 +230,23 @@ LOGGING = {
 GRAPHENE = {
     'SCHEMA': 'inverter_db.schema.schema',
 }
-redis_url = env('REDIS_TLS_URL', default=env('REDIS_URL'))
+raw_redis_url = env('REDIS_TLS_URL', default=env('REDIS_URL'))
+parsed_url = urlparse(raw_redis_url)
+
+# Додаємо параметр ssl_cert_reqs в URL
+query = dict(urlparse(raw_redis_url).query)
+query.update({"ssl_cert_reqs": "CERT_NONE"})
+new_query = urlencode(query)
+
+# Створюємо новий URL з параметром ssl_cert_reqs
+redis_url = urlunparse(
+    (parsed_url.scheme, parsed_url.netloc, parsed_url.path, parsed_url.params, new_query, parsed_url.fragment)
+)
+
+# Налаштування Celery
 CELERY_BROKER_URL = redis_url
 CELERY_RESULT_BACKEND = redis_url
 CELERY_BROKER_TRANSPORT_OPTIONS = {
     "visibility_timeout": 3600,  # таймаут у секундах
-    "ssl": {
-        "ssl_cert_reqs": "CERT_NONE"  # встановлюємо ssl_cert_reqs на CERT_NONE
-    },
 }
-
 CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
