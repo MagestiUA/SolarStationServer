@@ -229,12 +229,13 @@ GRAPHENE = {
     'SCHEMA': 'inverter_db.schema.schema',
 }
 redis_url = env('REDIS_TLS_URL', default=env('REDIS_URL'))
-CELERY_BROKER_URL = env('REDIS_TLS_URL')
+CELERY_BROKER_URL = redis_url
+CELERY_RESULT_BACKEND = redis_url
 CELERY_BROKER_TRANSPORT_OPTIONS = {
-    "visibility_timeout": 3600, # в секундах
+    "visibility_timeout": 3600,  # таймаут у секундах
     "ssl": {
-        "ssl_cert_reqs": None
+        "ssl_cert_reqs": "CERT_NONE"  # встановлюємо ssl_cert_reqs на CERT_NONE
     },
 }
-CELERY_RESULT_BACKEND = redis_url
+
 CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
