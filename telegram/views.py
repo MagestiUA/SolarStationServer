@@ -1,4 +1,5 @@
 from django.views.decorators.csrf import csrf_exempt
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -7,6 +8,7 @@ from SolarStationServer.tasks import send_battery_voltage
 
 
 @csrf_exempt
+@swagger_auto_schema(method='post', auto_schema=None)
 @api_view(['POST'])
 @authentication_classes([])
 @permission_classes([])
