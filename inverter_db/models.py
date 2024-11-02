@@ -26,8 +26,6 @@ class InverterData(models.Model):
     ac_radiator_temperature = models.FloatField()  # Температура AC радіатора
     transformer_temperature = models.FloatField()  # Температура трансформатора
     dc_radiator_temperature = models.FloatField()  # Температура DC радіатора
-    # batt_power = models.FloatField()  # Потужність батареї (W)
-    # batt_current = models.FloatField()  # Струм батареї (A)
     pv_voltage = models.FloatField()  # Напруга PV (сонячна батарея)
     charger_current = models.FloatField()  # Струм зарядного пристрою
     charger_power = models.FloatField()  # Потужність зарядного пристрою (W)
@@ -38,7 +36,6 @@ class InverterData(models.Model):
     class Meta:
         verbose_name = "Inverter Current Data"
         verbose_name_plural = "Inverter Current Data History"
-#'inverters_accumulated_data': {'Accumulated charger power high': (0, 'KWH'), 'Accumulated charger power low': (0.0, 'KWH'), 'Accumulated discharger power high': (0, 'KWH'), 'Accumulated discharger power low': (0.7, 'KWH'), 'Accumulated buy power high': (0, 'KWH'), 'Accumulated buy power low': (0.0, 'KWH'), 'Accumulated sell power high': (0, 'KWH'), 'Accumulated sell power low': (0.0, 'KWH'), 'Accumulated load power high': (0, 'KWH'), 'Accumulated load power low': (0.6, 'KWH'), 'Accumulated self_use power high': (0, 'KWH'), 'Accumulated self_use power low': (0.7, 'KWH'), 'Accumulated PV_sell power high': (0, 'KWH'), 'Accumulated PV_sell power low': (0.0, 'KWH'), 'Accumulated grid_charger power high': (0, 'KWH'), 'Accumulated  grid_charger power low': (0.0, 'KWH'), 'Accumulated PV power high': (0, 'KWH'), 'Accumulated PV power low': (0.0, 'KWH'), 'Accumulated day': (175, 'day'), 'Accumulated hour': (2, 'hour'), 'Accumulated minute': (1, 'minute')}
 
 class InverterAccumulatedData(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)  # Часова мітка

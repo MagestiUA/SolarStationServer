@@ -32,7 +32,7 @@ class CustomUser(AbstractUser):
     )
     role = models.CharField(max_length=10, choices=ROLES, default='user')
 
-    objects = CustomUserManager()  # Використовуємо кастомний менеджер
+    objects = CustomUserManager()
 
     def __str__(self):
         return self.username
