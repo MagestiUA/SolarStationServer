@@ -228,7 +228,7 @@ LOGGING = {
 GRAPHENE = {
     'SCHEMA': 'inverter_db.schema.schema',
 }
-redis_url = env('REDIS_TLS_URL')
+redis_url = env('REDIS_TLS_URL', default=env('REDIS_URL'))
 CELERY_BROKER_URL = env('REDIS_TLS_URL')
 CELERY_BROKER_TRANSPORT_OPTIONS = {
     "visibility_timeout": 3600, # в секундах
