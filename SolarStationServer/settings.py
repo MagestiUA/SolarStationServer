@@ -103,7 +103,6 @@ WSGI_APPLICATION = 'SolarStationServer.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASE_TYPE = env('DATABASE_TYPE')
 if DATABASE_TYPE == 'postgres':
@@ -153,8 +152,8 @@ AUTHENTICATION_BACKENDS = (
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
-# LANGUAGE_CODE = 'uk'
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'uk'
+# LANGUAGE_CODE = 'en-us'
 USE_I18N = True
 
 USE_TZ = True
@@ -174,13 +173,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# REST_FRAMEWORK = {
-#     'DEFAULT_PERMISSION_CLASSES': [
-#         'rest_framework_api_key.permissions.HasAPIKey',
-#     ],
-# }
-#
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [

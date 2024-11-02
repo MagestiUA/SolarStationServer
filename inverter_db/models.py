@@ -59,7 +59,6 @@ class InverterAccumulatedData(models.Model):
         verbose_name = "Inverter Accumulated Data"
         verbose_name_plural = "Inverter Accumulated History"
 
-#'inverters_base_config': {'AC voltage grade': (230, 'V'), 'Rated power(VA)': (5000, 'VA'), 'Batt voltage grade': (48, 'V'), 'Rated power(W)': (5000, 'W'), 'BattVol Grade': (48, 'V'), 'Rated Current': (80.0, 'A')}
 
 class InverterBaseConfig(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)  # Часова мітка
@@ -77,7 +76,6 @@ class InverterBaseConfig(models.Model):
         verbose_name = "Inverter Base Config"  # Назва в однині
         verbose_name_plural = "Inverter Base Config History"  # Назва у множині
 
-#'inverters_param_states': {'work state': 'OffGrid', 'Inverter relay state': 'Connect', 'Grid relay state': 'Disconnect', 'Load relay state': 'Connect', 'N_Line relay state': 'Disconnect', 'DC relay state': 'Connect', 'Earth relay state': 'Disconnect', 'Charger workstate': 'Initialization mode', 'Mppt state': 'Stop', 'charging state': 'Stop'},
 
 class InverterParamState(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)  # Часова мітка
@@ -99,8 +97,6 @@ class InverterParamState(models.Model):
         verbose_name = "Inverter Current Systems State"
         verbose_name_plural = "Inverter Current Systems State History"
 
-
-#'inverters_errors': {'Error message 1': 0, 'Error message 2': 0, 'Error message 3': 0, 'Warning message 1': 0, 'Warning message 2': 0, 'Error message, Refer to frame Charger Error message 1': 0, 'Warning message, Refer to frame Charger Warning message 1': 0}}
 
 class InverterErrors(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)  # Часова мітка
