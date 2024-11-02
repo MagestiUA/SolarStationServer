@@ -228,5 +228,10 @@ LOGGING = {
 GRAPHENE = {
     'SCHEMA': 'inverter_db.schema.schema',
 }
-CELERY_BROKER_URL = env('REDIS_URL')
+redis_url = env('REDIS_TLS_URL')
+if redis_url.startswith("rediss://"):
+    CELERY_BROKER_URL = redis_url
+    CELERY_BROKER_TRANSPORT_OPTIONS = {"ssl_cert_reqs": None}
+else:
+    CELERY_BROKER_URL = redis_url
 CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
