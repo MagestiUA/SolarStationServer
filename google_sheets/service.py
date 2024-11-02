@@ -40,6 +40,8 @@ def write_to_sheet(range, data):
         body={'values': data}
     )
 
-
-if __name__ == "__main__":
-    print(read_from_sheet("A1:B2"))
+#
+# if __name__ == "__main__":
+#     print(read_from_sheet("A1:B2"))
+#     battery_voltage = 12
+#     write_to_sheet("A1:B2", [["Поточна напруга батареї:", str(battery_voltage)]])

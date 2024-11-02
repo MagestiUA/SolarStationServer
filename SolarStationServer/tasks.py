@@ -9,8 +9,8 @@ def update_battery_voltage():
 	latest_data = InverterData.objects.order_by('-timestamp').first()
 	if latest_data:
 		battery_voltage = latest_data.battery_voltage
-		range = "BatteryVoltage!B1"
-		write_to_sheet(range, [[str(battery_voltage)]])
+		range = "A1:B2"
+		write_to_sheet(range, [["Поточна напруга батареї:", str(battery_voltage)]])
 		send_telegram_message(user_id=710346358, message=f"Поточна напруга батареї: {battery_voltage} В")
 
 @shared_task

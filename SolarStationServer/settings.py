@@ -15,6 +15,12 @@ from urllib.parse import urlparse, urlencode, urlunparse
 import os
 
 
+def is_running_in_docker():
+    """Перевіряє, чи запускається код всередині Docker-контейнера."""
+    path_to_dockerenv = '/.dockerenv'
+    return os.path.exists(path_to_dockerenv)
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env()
@@ -28,7 +34,7 @@ if not os.path.exists(LOG_DIR):
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env('SECRET_KEY')
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*', '192.168.72.110', '6c83-80-92-235-230.ngrok-free.app', 'localhost',]
 CSRF_TRUSTED_ORIGINS = [
@@ -229,23 +235,23 @@ LOGGING = {
 GRAPHENE = {
     'SCHEMA': 'inverter_db.schema.schema',
 }
-raw_redis_url = env('REDIS_TLS_URL', default=env('REDIS_URL'))
-parsed_url = urlparse(raw_redis_url)
 
-# Додаємо параметр ssl_cert_reqs в URL
-query = dict(urlparse(raw_redis_url).query)
-query.update({"ssl_cert_reqs": "CERT_NONE"})
-new_query = urlencode(query)
-
-# Створюємо новий URL з параметром ssl_cert_reqs
-redis_url = urlunparse(
-    (parsed_url.scheme, parsed_url.netloc, parsed_url.path, parsed_url.params, new_query, parsed_url.fragment)
-)
-
-# Налаштування Celery
-CELERY_BROKER_URL = redis_url
-CELERY_RESULT_BACKEND = redis_url
-CELERY_BROKER_TRANSPORT_OPTIONS = {
-    "visibility_timeout": 3600,  # таймаут у секундах
-}
+if is_running_in_docker():
+    redis_url='redis://redis:6379/0'
+    CELERY_BROKER_URL = redis_url
+    CELERY_RESULT_BACKEND = redis_url
+else:
+    raw_redis_url = env('REDIS_TLS_URL', default=env('REDIS_URL'))
+    parsed_url = urlparse(raw_redis_url)
+    query = dict(urlparse(raw_redis_url).query)
+    query.update({"ssl_cert_reqs": "CERT_NONE"})
+    new_query = urlencode(query)
+    redis_url = urlunparse(
+        (parsed_url.scheme, parsed_url.netloc, parsed_url.path, parsed_url.params, new_query, parsed_url.fragment)
+    )
+    CELERY_BROKER_URL = redis_url
+    CELERY_RESULT_BACKEND = redis_url
+    CELERY_BROKER_TRANSPORT_OPTIONS = {
+        "visibility_timeout": 3600,
+    }
 CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True

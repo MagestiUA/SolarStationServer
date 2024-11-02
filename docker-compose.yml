@@ -1,10 +1,46 @@
+version: '3.8'
+
 services:
   web:
-    build: .
-    restart: always
-    command: gunicorn SolarStationServer.wsgi:application --bind 0.0.0.0:5001 --workers 3
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: >
+      sh -c "python manage.py migrate &&
+             gunicorn SolarStationServer.wsgi:application --bind 0.0.0.0:8000"
     ports:
-      - "5001:5001"
-    environment:
-      - DEBUG=False
-      - ALLOWED_HOSTS=*
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - redis
+    volumes:
+      - static_volume:/app/staticfiles  # Для статики
+
+  celery:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: celery -A SolarStationServer worker --loglevel=info
+    env_file:
+      - .env
+    depends_on:
+      - redis
+
+  celery_beat:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: celery -A SolarStationServer beat --loglevel=info
+    env_file:
+      - .env
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+
+volumes:
+  static_volume:
